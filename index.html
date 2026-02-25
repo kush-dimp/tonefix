@@ -968,22 +968,22 @@ The dashboard will transform it into professional, grammatically correct, well-s
                 if (medium) {
                     switch (medium) {
                         case 'email':
-                            mediumGuidance = `\nMEDIUM: Email\n- Include appropriate subject line suggestions in brackets at the start if relevant\n- Use formal structure: greeting, body paragraphs, closing signature\n- Can be longer and more detailed\n- Include salutations like "Dear [Name]" or "Hi [Name]"\n- End with "Best regards," "Sincerely," etc.`;
+                            mediumGuidance = `\nMEDIUM: Email — MANDATORY FORMAT FOR EVERY OPTION:\nLine 1: Subject: [concise subject line]\nLine 2: (blank line)\nLine 3: Dear [Name], OR Hi [Name],\nLine 4+: 2-3 well-structured body paragraphs\nSecond-to-last line: Best regards, / Kind regards, / Sincerely,\nLast line: [Your Name]\n\nDO NOT skip the subject line. DO NOT skip the greeting. DO NOT skip the closing signature. Every single option must follow this exact email structure.`;
                             break;
                         case 'chat':
-                            mediumGuidance = `\nMEDIUM: Chat / Instant Message\n- Keep it concise and conversational\n- Use shorter sentences and paragraphs\n- No need for formal greetings/closings\n- Get to the point quickly`;
+                            mediumGuidance = `\nMEDIUM: Live Chat / Customer Support Chat — MANDATORY FORMAT FOR EVERY OPTION:\n- 2 to 4 sentences MAXIMUM — be brief\n- NO subject line\n- NO "Dear [Name]" or formal greeting — start directly with the message\n- NO closing signature like "Best regards"\n- Conversational, warm, and professional tone\n- Acknowledge the issue first, then provide the solution or next step\n- Sound like a real support agent, not a formal letter`;
                             break;
                         case 'slack':
-                            mediumGuidance = `\nMEDIUM: Slack\n- Casual but professional tone\n- Use short, scannable messages\n- Can use emojis sparingly\n- No formal salutations needed`;
+                            mediumGuidance = `\nMEDIUM: Slack — MANDATORY FORMAT FOR EVERY OPTION:\n- Short and scannable — 3 to 5 lines max\n- NO subject line, NO formal greeting, NO sign-off\n- Start directly with the key point\n- Bullet points are fine for clarity\n- Casual but professional tone`;
                             break;
                         case 'teams':
-                            mediumGuidance = `\nMEDIUM: Microsoft Teams\n- Professional but conversational\n- Moderate length\n- Slightly more formal than Slack but less than email`;
+                            mediumGuidance = `\nMEDIUM: Microsoft Teams — MANDATORY FORMAT FOR EVERY OPTION:\n- Concise — 4 to 6 lines max\n- NO subject line\n- Optional brief greeting (Hi [Name],) but keep it short\n- Professional but conversational tone\n- Clear and direct`;
                             break;
                         case 'whatsapp':
-                            mediumGuidance = `\nMEDIUM: WhatsApp / SMS\n- Very brief and concise\n- Casual and friendly tone\n- Short sentences\n- Get to the point immediately`;
+                            mediumGuidance = `\nMEDIUM: WhatsApp / SMS — MANDATORY FORMAT FOR EVERY OPTION:\n- 1 to 3 sentences MAXIMUM\n- NO subject line, NO formal greeting, NO sign-off\n- Very casual and friendly tone\n- Get to the point in the very first sentence`;
                             break;
                         case 'ticket':
-                            mediumGuidance = `\nMEDIUM: Support Ticket\n- Professional and structured\n- Clear problem statement and solution\n- Can be detailed with steps`;
+                            mediumGuidance = `\nMEDIUM: Support Ticket — MANDATORY FORMAT FOR EVERY OPTION:\n- Start with a clear acknowledgement of the issue\n- Provide the resolution or next steps in structured paragraphs\n- Professional, helpful, and empathetic tone\n- Can be detailed — customers read tickets carefully\n- End with a next-step or offer for further help (e.g. "Please let us know if you need anything else.")`;
                             break;
                     }
                 }
@@ -1030,10 +1030,11 @@ Rules for all responses:
 * ALWAYS respond in English, regardless of input language
 * Fix ALL grammar, spelling, and punctuation errors
 * Make the message professional and well-structured
-${medium ? `* CRITICAL: Tailor the response format, length, and style for ${medium}` : '* Use professional business format'}
-${medium === 'email' ? '* Include [Subject: ...] at the start if a subject line would be helpful' : ''}
-${medium === 'chat' || medium === 'slack' || medium === 'whatsapp' ? '* Keep it concise - these are quick messaging platforms' : ''}
-${medium === 'email' || medium === 'ticket' ? '* Can be more detailed and structured' : ''}
+${medium ? `* CRITICAL: You MUST strictly follow the ${medium} format specified above — no exceptions` : '* Use professional business format'}
+${medium === 'email' ? '* MANDATORY: Every option MUST have Subject line, greeting (Dear/Hi [Name],), body, and closing signature (Best regards / [Your Name])' : ''}
+${medium === 'chat' ? '* MANDATORY: Every option MUST be 2-4 sentences max, NO subject, NO greeting, NO sign-off — start with the message directly' : ''}
+${medium === 'slack' || medium === 'whatsapp' ? '* MANDATORY: Keep extremely short — no formal structure, no greeting, no sign-off' : ''}
+${medium === 'ticket' ? '* MANDATORY: Acknowledge the issue, give structured resolution, end with an offer to help further' : ''}
 ${relationship ? `* Adjust tone for ${relationship} relationship` : '* Use professional business tone'}
 ${formality ? `* Match ${formality} formality level` : '* Use professional formality'}
 ${threadHistory ? "* CRITICAL: Use the conversation history to inform your response - acknowledge past interactions, address concerns raised, and adjust tone based on the client's emotional trajectory" : ''}
