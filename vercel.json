@@ -1,7 +1,11 @@
 {
-  "functions": {
-    "api/polish.js": {
-      "runtime": "nodejs22.x"
-    }
-  }
+  "version": 2,
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "api/polish.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/polish", "dest": "/api/polish" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
