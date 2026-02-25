@@ -6,230 +6,318 @@
     <meta name="color-scheme" content="dark">
     <title>ReplySmith</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             color-scheme: dark;
-            --bg-primary: #0f1117;
-            --bg-secondary: #1a1d29;
-            --bg-tertiary: #252837;
-            --bg-card: linear-gradient(135deg, #1a1d29 0%, #14161f 100%);
+            --bg-primary: #080a0f;
+            --bg-card: #0d0f19;
             --accent-primary: #6366f1;
-            --accent-hover: #4f46e5;
             --accent-secondary: #8b5cf6;
             --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             --success: #10b981;
             --warning: #f59e0b;
+            --info: #3b82f6;
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
             --text-muted: #64748b;
-            --border-color: #2d3142;
-            --border-hover: #3f4556;
-            --shadow-sm: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
-            --shadow-md: 0 8px 16px -2px rgba(0, 0, 0, 0.5);
-            --shadow-lg: 0 16px 32px -4px rgba(0, 0, 0, 0.6);
-            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --border-color: #1e2235;
+            --border-hover: #2d3455;
+            --shadow-sm: 0 2px 8px 0 rgba(0,0,0,0.5);
+            --shadow-md: 0 8px 24px -4px rgba(0,0,0,0.6);
+            --shadow-lg: 0 20px 40px -8px rgba(0,0,0,0.7);
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0a0c10 0%, #14161f 50%, #1a1d29 100%);
-            background-attachment: fixed;
+            background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 32px 32px;
             pointer-events: none;
             z-index: 0;
+        }
+
+        /* Background orbs */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bg-orb-1 {
+            width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 70%);
+            top: -250px; left: -200px;
+            animation: orbFloat1 25s ease-in-out infinite;
+        }
+        .bg-orb-2 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
+            bottom: -150px; right: -150px;
+            animation: orbFloat2 20s ease-in-out infinite;
+        }
+        .bg-orb-3 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 70%);
+            top: 40%; left: 42%;
+            animation: orbFloat3 30s ease-in-out infinite;
+        }
+        @keyframes orbFloat1 {
+            0%,100% { transform: translate(0,0); }
+            33% { transform: translate(40px,-40px); }
+            66% { transform: translate(-20px,30px); }
+        }
+        @keyframes orbFloat2 {
+            0%,100% { transform: translate(0,0); }
+            33% { transform: translate(-30px,30px); }
+            66% { transform: translate(20px,-20px); }
+        }
+        @keyframes orbFloat3 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(20px,-20px) scale(1.1); }
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 48px 24px;
+            padding: 48px 24px 80px;
             position: relative;
             z-index: 1;
         }
 
+        /* Header */
         header {
-            margin-bottom: 48px;
             text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .brand-area {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .brand-icon {
+            width: 52px; height: 52px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(99,102,241,0.45);
+            animation: iconGlow 3s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes iconGlow {
+            0%,100% { box-shadow: 0 0 30px rgba(99,102,241,0.45); }
+            50% { box-shadow: 0 0 55px rgba(99,102,241,0.75), 0 0 90px rgba(139,92,246,0.3); }
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.75rem;
             font-weight: 700;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 12px;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            display: inline;
+        }
+
+        .beta-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+            border: 1px solid rgba(99,102,241,0.4);
+            border-radius: 6px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: #a5b4fc;
+            letter-spacing: 0.1em;
+            vertical-align: middle;
+            margin-left: 10px;
+            position: relative;
+            top: -4px;
+            -webkit-text-fill-color: #a5b4fc;
         }
 
         .subtitle {
-            font-size: 1.125rem;
+            font-size: 1.0625rem;
             color: var(--text-secondary);
             font-weight: 400;
-            max-width: 700px;
-            margin: 0 auto;
+            max-width: 520px;
+            margin: 0 auto 24px;
         }
 
+        /* Steps bar */
+        .steps-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 40px;
+            padding: 8px 22px;
+        }
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .step-num {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .step-item.active .step-num {
+            background: var(--accent-gradient);
+            color: white;
+        }
+        .step-item.active { color: var(--text-secondary); }
+        .step-sep {
+            width: 28px; height: 1px;
+            background: var(--border-color);
+        }
+
+        /* Dashboard grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
+        /* Panel */
         .panel {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 28px;
             box-shadow: var(--shadow-sm);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s, border-color 0.3s;
             position: relative;
             overflow: visible;
         }
 
-        .panel::before {
+        /* Colored left accent */
+        .panel::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            top: 14px; left: 0; bottom: 14px;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
+            opacity: 0.6;
+            transition: opacity 0.3s;
         }
+        .panel-indigo::after  { background: linear-gradient(180deg, #6366f1, #4f46e5); }
+        .panel-violet::after  { background: linear-gradient(180deg, #8b5cf6, #7c3aed); }
+        .panel-emerald::after { background: linear-gradient(180deg, #10b981, #059669); }
+        .panel-amber::after   { background: linear-gradient(180deg, #f59e0b, #d97706); }
 
         .panel:hover {
-            box-shadow: var(--shadow-md), var(--glow);
             border-color: var(--border-hover);
-            transform: translateY(-2px);
+            box-shadow: var(--shadow-md), 0 0 0 1px rgba(99,102,241,0.08);
+            transform: translateY(-3px);
         }
+        .panel:hover::after { opacity: 1; }
 
-        .panel:hover::before {
-            opacity: 1;
+        /* Step badge */
+        .step-badge {
+            position: absolute;
+            top: -13px; left: 28px;
+            color: white;
+            font-size: 0.63rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            padding: 3px 10px;
+            border-radius: 12px;
+            letter-spacing: 0.12em;
         }
+        .panel-indigo  .step-badge { background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 2px 8px rgba(99,102,241,0.5); }
+        .panel-violet  .step-badge { background: linear-gradient(135deg, #8b5cf6, #7c3aed); box-shadow: 0 2px 8px rgba(139,92,246,0.5); }
+        .panel-emerald .step-badge { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 2px 8px rgba(16,185,129,0.5); }
 
-        .panel-header {
-            margin-bottom: 24px;
-        }
-
-        .panel-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .panel-subtitle {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .form-group {
+        .panel-header { margin-bottom: 22px; padding-top: 4px; }
+        .panel-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
+        .panel-header-row .panel-header { margin-bottom: 0; }
 
-        .form-group:last-of-type {
-            margin-bottom: 0;
+        .panel-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
         }
+        .panel-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group:last-of-type { margin-bottom: 0; }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 0.875rem;
+            margin-bottom: 7px;
+            font-size: 0.8125rem;
             color: var(--text-secondary);
             font-weight: 500;
         }
 
         select, textarea {
             width: 100%;
-            padding: 12px 16px;
-            background-color: #0f1117 !important;
+            padding: 11px 14px;
+            background-color: #080a0f !important;
             border: 1px solid var(--border-color);
             border-radius: 10px;
             color: #f1f5f9 !important;
             font-family: 'Inter', sans-serif;
-            font-size: 0.9375rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
             color-scheme: dark;
             -webkit-appearance: none;
             -moz-appearance: none;
         }
-
-        /* Force dark background on dropdown options - multiple approaches for browser compatibility */
-        select option {
-            background-color: #0f1117 !important;
-            background: #0f1117 !important;
-            color: #f1f5f9 !important;
-            padding: 10px;
-        }
-
-        select optgroup {
-            background-color: #1a1d29 !important;
-            background: #1a1d29 !important;
-            color: #cbd5e1 !important;
-            font-weight: 600;
-        }
-
-        /* Additional specificity for dropdown menu when opened */
-        select:active,
-        select:focus,
-        select:active option,
-        select:focus option {
-            background-color: #0f1117 !important;
-            background: #0f1117 !important;
-            color: #f1f5f9 !important;
-        }
-
-        select option:hover {
-            background-color: #1a1d29 !important;
-            background: #1a1d29 !important;
-        }
-
-        select option:checked {
-            background-color: #6366f1 !important;
-            background: #6366f1 !important;
-            color: white !important;
-        }
-
-        /* Remove transitions that might cause flash */
-        select * {
-            transition: none !important;
-        }
+        select option { background-color: #080a0f !important; color: #f1f5f9 !important; }
+        select optgroup { background-color: #0d0f19 !important; color: #cbd5e1 !important; font-weight: 600; }
+        select:active option, select:focus option { background-color: #080a0f !important; color: #f1f5f9 !important; }
+        select option:checked { background-color: #6366f1 !important; color: white !important; }
+        select * { transition: none !important; }
 
         select:focus, textarea:focus {
             outline: none;
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), var(--glow);
-            background-color: #0f1117 !important;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
         }
-
-        select:hover, textarea:hover {
-            border-color: var(--accent-primary);
-        }
+        select:hover, textarea:hover { border-color: var(--border-hover); }
 
         select {
             color-scheme: dark;
@@ -237,68 +325,36 @@
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            background-color: #1a1d29 !important;
+            background-color: #080a0f !important;
             background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 14px center;
-            padding-right: 40px;
+            padding-right: 38px;
             transition: none !important;
         }
-
-        /* Prevent white flash on click/focus */
-        select:active,
-        select:focus,
-        select:hover {
-            background-color: #1a1d29 !important;
-            background: #1a1d29 !important;
-        }
-
-        /* For WebKit browsers - force system to use dark theme */
-        select::-webkit-scrollbar {
-            background-color: #1a1d29;
-        }
-
-        select::-webkit-scrollbar-thumb {
-            background-color: #3f4556;
-        }
-
-        /* Firefox specific */
-        @-moz-document url-prefix() {
-            select {
-                scrollbar-color: #3f4556 #1a1d29;
-            }
-        }
+        select:active, select:focus, select:hover { background-color: #080a0f !important; }
 
         textarea {
-            min-height: 200px;
+            min-height: 180px;
             resize: vertical;
             line-height: 1.6;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
+        textarea::placeholder { color: var(--text-muted); }
 
-        textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-
-        /* Custom Dropdown Styles */
-        .custom-select-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
-        .custom-select-wrapper select {
-            display: none;
-        }
+        /* Custom Dropdown */
+        .custom-select-wrapper { position: relative; width: 100%; }
+        .custom-select-wrapper select { display: none; }
 
         .custom-select-trigger {
             width: 100%;
-            padding: 12px 16px;
-            background-color: #0f1117;
+            padding: 11px 14px;
+            background-color: #080a0f;
             border: 1px solid var(--border-color);
             border-radius: 10px;
             color: #f1f5f9;
             font-family: 'Inter', sans-serif;
-            font-size: 0.9375rem;
+            font-size: 0.9rem;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -306,34 +362,24 @@
             user-select: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-
-        .custom-select-trigger:hover {
-            border-color: var(--border-hover);
-        }
-
+        .custom-select-trigger:hover { border-color: var(--border-hover); }
         .custom-select-trigger.open {
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
         }
-
         .custom-select-arrow {
-            width: 12px;
-            height: 8px;
+            width: 12px; height: 8px;
             margin-left: 10px;
             flex-shrink: 0;
             transition: transform 0.2s ease;
         }
-
-        .custom-select-trigger.open .custom-select-arrow {
-            transform: rotate(180deg);
-        }
+        .custom-select-trigger.open .custom-select-arrow { transform: rotate(180deg); }
 
         .custom-select-dropdown {
             position: absolute;
             top: calc(100% + 6px);
-            left: 0;
-            right: 0;
-            background: #0f1117;
+            left: 0; right: 0;
+            background: #080a0f;
             border: 1px solid var(--border-color);
             border-radius: 12px;
             max-height: 280px;
@@ -342,334 +388,338 @@
             box-shadow: var(--shadow-lg);
             display: none;
         }
-
-        .custom-select-dropdown.open {
-            display: block;
-        }
-
-        .custom-select-dropdown::-webkit-scrollbar { width: 6px; }
-        .custom-select-dropdown::-webkit-scrollbar-track { background: #0f1117; border-radius: 12px; }
-        .custom-select-dropdown::-webkit-scrollbar-thumb { background: #2d3142; border-radius: 6px; }
-        .custom-select-dropdown::-webkit-scrollbar-thumb:hover { background: #3f4556; }
+        .custom-select-dropdown.open { display: block; }
+        .custom-select-dropdown::-webkit-scrollbar { width: 5px; }
+        .custom-select-dropdown::-webkit-scrollbar-track { background: #080a0f; border-radius: 12px; }
+        .custom-select-dropdown::-webkit-scrollbar-thumb { background: #1e2235; border-radius: 6px; }
+        .custom-select-dropdown::-webkit-scrollbar-thumb:hover { background: #2d3455; }
 
         .custom-select-optgroup {
             padding: 8px 14px 4px;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.07em;
             border-top: 1px solid var(--border-color);
         }
-
         .custom-select-optgroup:first-child { border-top: none; }
 
         .custom-select-option {
             padding: 10px 16px;
             color: #f1f5f9;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.15s;
+            font-size: 0.875rem;
+            transition: background 0.12s;
         }
-
-        .custom-select-option:hover {
-            background: #1a1d29;
-        }
-
+        .custom-select-option:hover { background: #0d0f19; }
         .custom-select-option.selected {
-            background: linear-gradient(90deg, rgba(99,102,241,0.2), transparent);
+            background: linear-gradient(90deg, rgba(99,102,241,0.18), transparent);
             color: #a5b4fc;
             font-weight: 500;
         }
 
-        .output-section {
+        /* Thread & input full-width */
+        .thread-panel { grid-column: span 3; }
+        .input-panel  { grid-column: span 3; }
+
+        .thread-textarea {
+            min-height: 155px;
+            background: rgba(255,255,255,0.02) !important;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        /* Chips */
+        .info-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: rgba(245,158,11,0.08);
+            border: 1px solid rgba(245,158,11,0.22);
+            border-radius: 20px;
+            font-size: 0.72rem;
+            color: #fcd34d;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .chip-dot {
+            width: 5px; height: 5px;
+            background: #f59e0b;
+            border-radius: 50%;
+            animation: chipPulse 2s ease-in-out infinite;
+        }
+        @keyframes chipPulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.4); }
+        }
+
+        .input-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: rgba(99,102,241,0.08);
+            border: 1px solid rgba(99,102,241,0.22);
+            border-radius: 20px;
+            font-size: 0.72rem;
+            color: #a5b4fc;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* Forge button */
+        #polishBtn {
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.01em;
+        }
+        #polishBtn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        #polishBtn:hover::before { left: 100%; }
+        #polishBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(99,102,241,0.55), 0 0 45px rgba(139,92,246,0.3);
+        }
+        #polishBtn:active { transform: translateY(0); }
+        #polishBtn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        #polishBtn:disabled:hover::before { left: -100%; }
+
+        /* Copy button */
+        .copy-button {
+            width: auto;
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            margin-top: 14px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-button:hover {
+            background: rgba(99,102,241,0.08);
+            border-color: var(--accent-primary);
+            color: #a5b4fc;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Error banner */
+        .error-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(185,28,28,0.08));
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 14px;
+            padding: 16px 20px;
+            color: #fca5a5;
+            font-size: 0.875rem;
+            margin-bottom: 24px;
+        }
+        .error-banner.visible { display: block; }
+
+        /* Output section */
+        .output-section { margin-top: 8px; }
+
+        .output-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .output-header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+        .output-header-sub {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+        }
+
+        .output-grid {
             display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
         }
 
         .response-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 24px;
             box-shadow: var(--shadow-sm);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-
+        /* Colored top bar per card */
         .response-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 2px;
-            background: var(--accent-gradient);
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
+        .card-professional::before { background: linear-gradient(90deg, #10b981, #059669); }
+        .card-warm::before         { background: linear-gradient(90deg, #f59e0b, #f97316); }
+        .card-concise::before      { background: linear-gradient(90deg, #3b82f6, #6366f1); }
 
-        .response-card:hover {
-            box-shadow: var(--shadow-md), var(--glow);
-            border-color: var(--border-hover);
-            transform: translateY(-4px);
-        }
-
-        .response-card:hover::before {
-            opacity: 1;
-        }
+        .response-card:hover { transform: translateY(-4px); border-color: var(--border-hover); }
+        .card-professional:hover { box-shadow: var(--shadow-md), 0 0 30px rgba(16,185,129,0.1); }
+        .card-warm:hover         { box-shadow: var(--shadow-md), 0 0 30px rgba(245,158,11,0.1); }
+        .card-concise:hover      { box-shadow: var(--shadow-md), 0 0 30px rgba(59,130,246,0.1); }
 
         .response-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 16px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--border-color);
         }
 
+        .option-badge {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-family: 'Courier New', monospace;
+        }
+        .badge-green  { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+        .badge-amber  { background: linear-gradient(135deg, #f59e0b, #f97316); color: white; }
+        .badge-blue   { background: linear-gradient(135deg, #3b82f6, #6366f1); color: white; }
+
+        .response-label-group { flex: 1; }
         .response-label {
             font-size: 0.875rem;
             font-weight: 600;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-primary);
+            margin-bottom: 2px;
         }
-
-        .response-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: #a5b4fc;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .response-tag:hover {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.25));
-            border-color: rgba(99, 102, 241, 0.5);
+        .response-sublabel {
+            font-size: 0.74rem;
+            color: var(--text-muted);
         }
 
         .response-content {
-            line-height: 1.7;
-            font-size: 0.9375rem;
+            flex: 1;
+            line-height: 1.75;
+            font-size: 0.9rem;
             color: var(--text-primary);
-            min-height: 100px;
+            min-height: 80px;
+            white-space: pre-wrap;
         }
-
         .response-content.empty {
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--text-muted);
             font-style: italic;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
+            min-height: 100px;
         }
-
-        .response-content.visible {
-            animation: fadeIn 0.4s ease;
-        }
+        .response-content.visible { animation: fadeIn 0.4s ease; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        button {
-            width: 100%;
-            padding: 14px 24px;
-            background: var(--accent-gradient);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9375rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        button:hover::before {
-            left: 100%;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md), 0 0 30px rgba(99, 102, 241, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        button:disabled:hover::before {
-            left: -100%;
-        }
-
-        .copy-button {
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.8125rem;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            margin-top: 12px;
-        }
-
-        .copy-button:hover {
-            background: rgba(99, 102, 241, 0.1);
-            border-color: var(--accent-primary);
-            color: var(--accent-primary);
-        }
-
-        .loading {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .info-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(168, 85, 247, 0.15));
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: #c4b5fd;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .info-tag:hover {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(168, 85, 247, 0.25));
-            border-color: rgba(139, 92, 246, 0.5);
-        }
-
-        .icon {
-            width: 6px;
-            height: 6px;
-            background: var(--accent-gradient);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(1.2);
-            }
-        }
-
-        .input-panel {
-            grid-column: span 3;
-        }
-
-        .thread-panel {
-            grid-column: span 3;
-        }
-
-        .thread-textarea {
-            min-height: 180px;
-            background: var(--bg-tertiary);
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.875rem;
-        }
-
+        /* Responsive */
         @media (max-width: 1200px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .input-panel, .thread-panel {
-                grid-column: span 2;
-            }
+            .dashboard-grid  { grid-template-columns: 1fr 1fr; }
+            .input-panel, .thread-panel { grid-column: span 2; }
+            .output-grid { grid-template-columns: 1fr; }
         }
-
         @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .input-panel, .thread-panel {
-                grid-column: span 1;
-            }
-
-            h1 {
-                font-size: 1.75rem;
-            }
-
-            .container {
-                padding: 32px 16px;
-            }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .input-panel, .thread-panel { grid-column: span 1; }
+            .output-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+            .container { padding: 32px 16px 64px; }
+            .steps-bar { display: none; }
         }
-    
-        .error-banner {
-            display: none;
-            background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(185,28,28,0.1));
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            border-radius: 12px;
-            padding: 16px 20px;
-            color: #fca5a5;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-        .error-banner.visible { display: block; }
     </style>
 </head>
 <body>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+
     <div class="container">
         <header>
-            <h1>ReplySmith</h1>
+            <div class="brand-area">
+                <div class="brand-icon">⚡</div>
+                <div style="text-align: left;">
+                    <h1>ReplySmith</h1><span class="beta-badge">BETA</span>
+                </div>
+            </div>
             <p class="subtitle">Paste what you really want to say. Get back what you should actually send.</p>
+            <div class="steps-bar">
+                <div class="step-item active">
+                    <div class="step-num">1</div>
+                    Configure
+                </div>
+                <div class="step-sep"></div>
+                <div class="step-item active">
+                    <div class="step-num">2</div>
+                    Write
+                </div>
+                <div class="step-sep"></div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    Forge
+                </div>
+            </div>
         </header>
 
         <div class="dashboard-grid">
-            <div class="panel">
+
+            <!-- Panel 1 -->
+            <div class="panel panel-indigo">
+                <div class="step-badge">01</div>
                 <div class="panel-header">
                     <h2 class="panel-title">Recipient Relationship</h2>
                     <p class="panel-subtitle">Who are you responding to?</p>
                 </div>
-
                 <div class="form-group">
                     <label for="relationship">Relationship Type</label>
                     <select id="relationship">
@@ -682,7 +732,6 @@
                         <option value="stakeholder">Stakeholder / Executive</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="formality">Formality Level</label>
                     <select id="formality">
@@ -695,12 +744,13 @@
                 </div>
             </div>
 
-            <div class="panel">
+            <!-- Panel 2 -->
+            <div class="panel panel-violet">
+                <div class="step-badge">02</div>
                 <div class="panel-header">
                     <h2 class="panel-title">Format & Model</h2>
                     <p class="panel-subtitle">How and where is this being sent?</p>
                 </div>
-
                 <div class="form-group">
                     <label for="medium">Communication Medium</label>
                     <select id="medium">
@@ -713,7 +763,6 @@
                         <option value="ticket">Support Ticket</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="model">AI Model</label>
                     <select id="model">
@@ -738,12 +787,13 @@
                 </div>
             </div>
 
-            <div class="panel">
+            <!-- Panel 3 -->
+            <div class="panel panel-emerald">
+                <div class="step-badge">03</div>
                 <div class="panel-header">
                     <h2 class="panel-title">Desired Outcome</h2>
                     <p class="panel-subtitle">What do you want to achieve?</p>
                 </div>
-
                 <div class="form-group">
                     <label for="outcome">Response Type</label>
                     <select id="outcome">
@@ -758,7 +808,6 @@
                         <option value="escalate">Escalate Issue</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="urgency">Urgency Level</label>
                     <select id="urgency">
@@ -771,50 +820,21 @@
                 </div>
             </div>
 
-            <div class="panel">
-                <div class="panel-header">
-                    <h2 class="panel-title">Tone Settings</h2>
-                    <p class="panel-subtitle">Fine-tune the message tone</p>
-                </div>
-
-                <div class="form-group">
-                    <label for="sentiment">Your Current Tone</label>
-                    <select id="sentiment">
-                        <option value="">-- Select Tone --</option>
-                        <option value="neutral">Neutral</option>
-                        <option value="frustrated">Frustrated</option>
-                        <option value="angry">Angry / Upset</option>
-                        <option value="blunt">Too Blunt / Direct</option>
-                        <option value="apologetic">Overly Apologetic</option>
-                        <option value="passive_aggressive">Passive Aggressive</option>
-                        <option value="unprofessional">Unprofessional</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="preserve_intent">Preserve Original Intent</label>
-                    <select id="preserve_intent">
-                        <option value="">-- Select Intent --</option>
-                        <option value="yes">Yes - Keep my message strong</option>
-                        <option value="soften">Soften it a bit</option>
-                        <option value="diplomatic">Make it very diplomatic</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="panel thread-panel">
-                <div class="panel-header">
-                    <h2 class="panel-title">Previous Conversation Thread (Optional)</h2>
-                    <span class="info-tag">
-                        <span class="icon"></span>
-                        Auto-detects client sentiment
+            <!-- Thread panel -->
+            <div class="panel thread-panel panel-amber">
+                <div class="panel-header-row">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Previous Conversation Thread <span style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">(Optional)</span></h2>
+                        <p class="panel-subtitle">Paste history to help the AI understand full context</p>
+                    </div>
+                    <span class="info-chip">
+                        <span class="chip-dot"></span>
+                        Auto-detects sentiment
                     </span>
                 </div>
-
                 <div class="form-group">
-                    <label for="threadHistory">Paste previous messages to help analyze context</label>
-                    <textarea 
-                        id="threadHistory" 
+                    <textarea
+                        id="threadHistory"
                         class="thread-textarea"
                         placeholder="Paste the entire conversation thread here (optional). This helps the AI understand:
 • Client's emotional state and history
@@ -827,24 +847,25 @@ Client: I've been waiting 3 days for a response...
 You: Sorry for delay, we're working on it
 Client: This is unacceptable, I need this NOW!
 
-Leave blank if this is the first interaction or if you don't need context analysis."
+Leave blank if this is the first interaction."
                     ></textarea>
                 </div>
             </div>
 
+            <!-- Input panel -->
             <div class="panel input-panel">
-                <div class="panel-header">
-                    <h2 class="panel-title">Your Unpolished Response</h2>
-                    <span class="info-tag">
-                        <span class="icon"></span>
-                        Accepts any language, grammar errors, typos, or unprofessional tone
+                <div class="panel-header-row">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Your Unpolished Response</h2>
+                        <p class="panel-subtitle">Type or paste your rough draft — any language, any tone</p>
+                    </div>
+                    <span class="input-chip">
+                        <span style="opacity:0.6">⌘</span>&nbsp;Enter to forge
                     </span>
                 </div>
-
                 <div class="form-group">
-                    <label for="rawMessage">Paste your draft response here</label>
-                    <textarea 
-                        id="rawMessage" 
+                    <textarea
+                        id="rawMessage"
                         placeholder="Enter your poorly written, rude, or unprofessional response in any language. The system will polish it into professional English.
 
 Examples:
@@ -856,47 +877,58 @@ Examples:
 The dashboard will transform it into professional, grammatically correct, well-structured responses."
                     ></textarea>
                 </div>
-
                 <button id="polishBtn">
-                    <span id="btnText">Polish My Response</span>
+                    <span id="btnText">⚡ Forge My Reply</span>
                 </button>
             </div>
+
         </div>
 
         <div id="errorBanner" class="error-banner"></div>
 
         <div class="output-section" id="outputSection" style="display: none;">
-            <div class="response-card">
-                <div class="response-header">
-                    <span class="response-label">Option 1: Professional & Clear</span>
-                    <span class="response-tag">Balanced</span>
-                </div>
-                <div id="output1" class="response-content empty">
-                    Response will appear here...
-                </div>
-                <button class="copy-button" onclick="copyToClipboard('output1', this)">Copy Response</button>
+            <div class="output-header">
+                <div class="output-header-title">Your Forged Replies</div>
+                <div class="output-header-sub">3 polished versions — pick the one that fits</div>
             </div>
+            <div class="output-grid">
 
-            <div class="response-card">
-                <div class="response-header">
-                    <span class="response-label">Option 2: Warm & Diplomatic</span>
-                    <span class="response-tag">Empathetic</span>
+                <div class="response-card card-professional">
+                    <div class="response-header">
+                        <div class="option-badge badge-green">1</div>
+                        <div class="response-label-group">
+                            <div class="response-label">Professional &amp; Clear</div>
+                            <div class="response-sublabel">Balanced · Good for most situations</div>
+                        </div>
+                    </div>
+                    <div id="output1" class="response-content empty">Response will appear here...</div>
+                    <button class="copy-button" onclick="copyToClipboard('output1', this)">Copy</button>
                 </div>
-                <div id="output2" class="response-content empty">
-                    Response will appear here...
-                </div>
-                <button class="copy-button" onclick="copyToClipboard('output2', this)">Copy Response</button>
-            </div>
 
-            <div class="response-card">
-                <div class="response-header">
-                    <span class="response-label">Option 3: Concise & Direct</span>
-                    <span class="response-tag">Efficient</span>
+                <div class="response-card card-warm">
+                    <div class="response-header">
+                        <div class="option-badge badge-amber">2</div>
+                        <div class="response-label-group">
+                            <div class="response-label">Warm &amp; Diplomatic</div>
+                            <div class="response-sublabel">Empathetic · Best for sensitive situations</div>
+                        </div>
+                    </div>
+                    <div id="output2" class="response-content empty">Response will appear here...</div>
+                    <button class="copy-button" onclick="copyToClipboard('output2', this)">Copy</button>
                 </div>
-                <div id="output3" class="response-content empty">
-                    Response will appear here...
+
+                <div class="response-card card-concise">
+                    <div class="response-header">
+                        <div class="option-badge badge-blue">3</div>
+                        <div class="response-label-group">
+                            <div class="response-label">Concise &amp; Direct</div>
+                            <div class="response-sublabel">Efficient · For busy recipients</div>
+                        </div>
+                    </div>
+                    <div id="output3" class="response-content empty">Response will appear here...</div>
+                    <button class="copy-button" onclick="copyToClipboard('output3', this)">Copy</button>
                 </div>
-                <button class="copy-button" onclick="copyToClipboard('output3', this)">Copy Response</button>
+
             </div>
         </div>
     </div>
@@ -904,21 +936,19 @@ The dashboard will transform it into professional, grammatically correct, well-s
     <script>
         async function polishResponse() {
             document.getElementById('errorBanner').classList.remove('visible');
-            const relationship = document.getElementById('relationship').value;
-            const medium = document.getElementById('medium').value;
-            const model = document.getElementById('model').value;
-            const formality = document.getElementById('formality').value;
-            const outcome = document.getElementById('outcome').value;
-            const urgency = document.getElementById('urgency').value;
-            const sentiment = document.getElementById('sentiment').value;
-            const preserve_intent = document.getElementById('preserve_intent').value;
-            const rawMessage = document.getElementById('rawMessage').value.trim();
+            const relationship  = document.getElementById('relationship').value;
+            const medium        = document.getElementById('medium').value;
+            const model         = document.getElementById('model').value;
+            const formality     = document.getElementById('formality').value;
+            const outcome       = document.getElementById('outcome').value;
+            const urgency       = document.getElementById('urgency').value;
+            const rawMessage    = document.getElementById('rawMessage').value.trim();
             const threadHistory = document.getElementById('threadHistory').value.trim();
-            const output1 = document.getElementById('output1');
-            const output2 = document.getElementById('output2');
-            const output3 = document.getElementById('output3');
-            const btn = document.getElementById('polishBtn');
-            const btnText = document.getElementById('btnText');
+            const output1       = document.getElementById('output1');
+            const output2       = document.getElementById('output2');
+            const output3       = document.getElementById('output3');
+            const btn           = document.getElementById('polishBtn');
+            const btnText       = document.getElementById('btnText');
             const outputSection = document.getElementById('outputSection');
 
             if (!rawMessage) {
@@ -926,109 +956,55 @@ The dashboard will transform it into professional, grammatically correct, well-s
                 return;
             }
 
-            // Show loading state
             btn.disabled = true;
             btnText.innerHTML = '<span class="loading"></span>';
-            outputSection.style.display = 'grid';
-            
-            // Clear previous outputs
-            output1.textContent = 'Polishing your response...';
-            output2.textContent = 'Polishing your response...';
-            output3.textContent = 'Polishing your response...';
-            output1.classList.add('empty');
-            output2.classList.add('empty');
-            output3.classList.add('empty');
-            output1.classList.remove('visible');
-            output2.classList.remove('visible');
-            output3.classList.remove('visible');
+            outputSection.style.display = 'block';
+
+            output1.textContent = 'Forging...';
+            output2.textContent = 'Forging...';
+            output3.textContent = 'Forging...';
+            output1.classList.add('empty');    output2.classList.add('empty');    output3.classList.add('empty');
+            output1.classList.remove('visible'); output2.classList.remove('visible'); output3.classList.remove('visible');
 
             try {
                 let contextInfo = '';
                 let mediumGuidance = '';
-                
-                // Build medium-specific guidance
+
                 if (medium) {
-                    switch(medium) {
+                    switch (medium) {
                         case 'email':
-                            mediumGuidance = `\nMEDIUM: Email
-- Include appropriate subject line suggestions in brackets at the start if relevant
-- Use formal structure: greeting, body paragraphs, closing signature
-- Can be longer and more detailed
-- Use proper email etiquette and formatting
-- Include salutations like "Dear [Name]" or "Hi [Name]"
-- End with "Best regards," "Sincerely," etc.`;
+                            mediumGuidance = `\nMEDIUM: Email\n- Include appropriate subject line suggestions in brackets at the start if relevant\n- Use formal structure: greeting, body paragraphs, closing signature\n- Can be longer and more detailed\n- Include salutations like "Dear [Name]" or "Hi [Name]"\n- End with "Best regards," "Sincerely," etc.`;
                             break;
                         case 'chat':
-                            mediumGuidance = `\nMEDIUM: Chat / Instant Message
-- Keep it concise and conversational
-- Use shorter sentences and paragraphs
-- Can use casual punctuation (but stay professional)
-- No need for formal greetings/closings
-- Get to the point quickly
-- Can use line breaks for readability`;
+                            mediumGuidance = `\nMEDIUM: Chat / Instant Message\n- Keep it concise and conversational\n- Use shorter sentences and paragraphs\n- No need for formal greetings/closings\n- Get to the point quickly`;
                             break;
                         case 'slack':
-                            mediumGuidance = `\nMEDIUM: Slack
-- Casual but professional tone
-- Use short, scannable messages
-- Can use emojis sparingly if appropriate for company culture
-- Bullet points work well
-- No formal salutations needed
-- Quick and direct communication style`;
+                            mediumGuidance = `\nMEDIUM: Slack\n- Casual but professional tone\n- Use short, scannable messages\n- Can use emojis sparingly\n- No formal salutations needed`;
                             break;
                         case 'teams':
-                            mediumGuidance = `\nMEDIUM: Microsoft Teams
-- Professional but conversational
-- Moderate length - not too long
-- Can use formatting like bold or bullet points
-- Slightly more formal than Slack but less than email
-- Clear and direct`;
+                            mediumGuidance = `\nMEDIUM: Microsoft Teams\n- Professional but conversational\n- Moderate length\n- Slightly more formal than Slack but less than email`;
                             break;
                         case 'whatsapp':
-                            mediumGuidance = `\nMEDIUM: WhatsApp / SMS
-- Very brief and concise
-- Casual and friendly tone
-- Short sentences
-- No formal structure needed
-- Get to the point immediately
-- Mobile-friendly format`;
+                            mediumGuidance = `\nMEDIUM: WhatsApp / SMS\n- Very brief and concise\n- Casual and friendly tone\n- Short sentences\n- Get to the point immediately`;
                             break;
                         case 'ticket':
-                            mediumGuidance = `\nMEDIUM: Support Ticket
-- Professional and structured
-- Include ticket reference if relevant
-- Clear problem statement and solution
-- Can be detailed with steps
-- Professional but helpful tone
-- Use formatting for clarity`;
+                            mediumGuidance = `\nMEDIUM: Support Ticket\n- Professional and structured\n- Clear problem statement and solution\n- Can be detailed with steps`;
                             break;
                     }
                 }
-                
-                // Build context dynamically based on what user provided
+
                 if (threadHistory) {
-                    contextInfo += `\nPREVIOUS CONVERSATION THREAD:\n${threadHistory}\n\nIMPORTANT: Analyze the conversation thread to:
-- Automatically detect the client's true emotional state and sentiment
-- Understand relationship dynamics and history
-- Identify any previous commitments or promises
-- Note recurring issues or escalation patterns
-- Adjust your response accordingly even if other fields are blank\n`;
+                    contextInfo += `\nPREVIOUS CONVERSATION THREAD:\n${threadHistory}\n\nIMPORTANT: Analyze the conversation thread to:\n- Automatically detect the client's true emotional state and sentiment\n- Understand relationship dynamics and history\n- Identify any previous commitments or promises\n- Note recurring issues or escalation patterns\n- Adjust your response accordingly even if other fields are blank\n`;
                 }
-                
+
                 if (relationship) contextInfo += `\nRecipient: ${relationship}`;
-                if (formality) contextInfo += `\nFormality level: ${formality}`;
-                if (outcome) contextInfo += `\nDesired outcome: ${outcome}`;
-                if (urgency) contextInfo += `\nUrgency: ${urgency}`;
-                if (sentiment) contextInfo += `\nOriginal tone problem: ${sentiment}`;
-                if (preserve_intent) contextInfo += `\nIntent preservation: ${preserve_intent}`;
-                
-                // If NO context provided at all, use intelligent defaults
-                const hasContext = relationship || medium || formality || outcome || urgency || sentiment || preserve_intent || threadHistory;
+                if (formality)    contextInfo += `\nFormality level: ${formality}`;
+                if (outcome)      contextInfo += `\nDesired outcome: ${outcome}`;
+                if (urgency)      contextInfo += `\nUrgency: ${urgency}`;
+
+                const hasContext = relationship || medium || formality || outcome || urgency || threadHistory;
                 if (!hasContext) {
-                    contextInfo = `\nNo specific context provided. Use your best judgment to:
-- Analyze the message and infer the most appropriate tone
-- Detect any emotional undertones or sentiment
-- Create professional, polished versions suitable for business communication`;
+                    contextInfo = `\nNo specific context provided. Use your best judgment to:\n- Analyze the message and infer the most appropriate tone\n- Detect any emotional undertones or sentiment\n- Create professional, polished versions suitable for business communication`;
                 }
 
                 const prompt = `You are a professional communication expert specializing in polishing poorly written, rude, or unprofessional responses. The input message may be in ANY language and may contain:
@@ -1047,7 +1023,7 @@ Your task:
 4. Fix all grammar, spelling, and structural issues
 5. Transform the tone to be professional while maintaining the core message
 6. ${medium ? `CRITICAL: Format responses appropriately for ${medium} - adjust length, structure, and style accordingly` : 'Use appropriate business communication format'}
-${threadHistory ? '7. Let the conversation history inform your tone and approach - if the client is escalated, acknowledge it; if they\'re patient, maintain that warmth' : ''}
+${threadHistory ? "7. Let the conversation history inform your tone and approach - if the client is escalated, acknowledge it; if they're patient, maintain that warmth" : ''}
 
 Context:${contextInfo}
 ${mediumGuidance}
@@ -1065,8 +1041,8 @@ ${medium === 'chat' || medium === 'slack' || medium === 'whatsapp' ? '* Keep it 
 ${medium === 'email' || medium === 'ticket' ? '* Can be more detailed and structured' : ''}
 ${relationship ? `* Adjust tone for ${relationship} relationship` : '* Use professional business tone'}
 ${formality ? `* Match ${formality} formality level` : '* Use professional formality'}
-${threadHistory ? '* CRITICAL: Use the conversation history to inform your response - acknowledge past interactions, address concerns raised, and adjust tone based on the client\'s emotional trajectory' : ''}
-${preserve_intent ? `* ${preserve_intent === 'yes' ? 'Keep the original intent and firmness' : preserve_intent === 'soften' ? 'Soften the message slightly while keeping the main point' : 'Make the message very diplomatic and gentle'}` : '* Balance firmness with professionalism'}
+${threadHistory ? "* CRITICAL: Use the conversation history to inform your response - acknowledge past interactions, address concerns raised, and adjust tone based on the client's emotional trajectory" : ''}
+* Balance firmness with professionalism
 ${urgency ? `* Match the ${urgency} urgency level in your tone` : ''}
 * Remove any rudeness, aggression, or unprofessional language
 * If it's a rejection/decline, make it constructive
@@ -1100,11 +1076,7 @@ Do not include any other text, preambles, explanations, or comments about the or
                 const response = await fetch('/api/polish', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: model,
-                        messages: [{ role: 'user', content: prompt }],
-                        max_tokens: 3000
-                    })
+                    body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], max_tokens: 3000 })
                 });
 
                 const data = await response.json();
@@ -1113,23 +1085,22 @@ Do not include any other text, preambles, explanations, or comments about the or
                 if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
                     fullText = data.choices[0].message.content;
                 } else {
-                    throw new Error('Invalid response from OpenAI API');
+                    throw new Error('Invalid response from API');
                 }
-                
-                // Parse the three options from the response
+
                 const option1Match = fullText.match(/OPTION 1:?\s*([\s\S]*?)(?=OPTION 2:|$)/i);
                 const option2Match = fullText.match(/OPTION 2:?\s*([\s\S]*?)(?=OPTION 3:|$)/i);
                 const option3Match = fullText.match(/OPTION 3:?\s*([\s\S]*?)$/i);
-                
+
                 if (option1Match && option2Match && option3Match) {
                     output1.textContent = option1Match[1].trim();
                     output2.textContent = option2Match[1].trim();
                     output3.textContent = option3Match[1].trim();
-                    
+
                     output1.classList.remove('empty');
                     output2.classList.remove('empty');
                     output3.classList.remove('empty');
-                    
+
                     setTimeout(() => {
                         output1.classList.add('visible');
                         output2.classList.add('visible');
@@ -1147,32 +1118,27 @@ Do not include any other text, preambles, explanations, or comments about the or
                 document.getElementById('output3').textContent = '';
             } finally {
                 btn.disabled = false;
-                btnText.textContent = 'Polish My Response';
+                btnText.textContent = '⚡ Forge My Reply';
             }
         }
 
         function copyToClipboard(elementId, button) {
-            const element = document.getElementById(elementId);
-            const text = element.textContent;
-            
+            const text = document.getElementById(elementId).textContent;
             navigator.clipboard.writeText(text).then(() => {
-                const originalText = button.textContent;
+                const orig = button.textContent;
                 button.textContent = '✓ Copied!';
-                button.style.background = 'rgba(16, 185, 129, 0.1)';
+                button.style.background = 'rgba(16,185,129,0.1)';
                 button.style.borderColor = '#10b981';
                 button.style.color = '#10b981';
                 setTimeout(() => {
-                    button.textContent = originalText;
+                    button.textContent = orig;
                     button.style.background = '';
                     button.style.borderColor = '';
                     button.style.color = '';
                 }, 2000);
-            }).catch(err => {
-                alert('Failed to copy: ' + err);
-            });
+            }).catch(err => alert('Failed to copy: ' + err));
         }
 
-        // Allow Ctrl/Cmd + Enter to submit
         document.getElementById('rawMessage').addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault();
@@ -1230,6 +1196,8 @@ Do not include any other text, preambles, explanations, or comments about the or
                         item.classList.add('selected');
                         dropdown.classList.remove('open');
                         trigger.classList.remove('open');
+                        const panel = wrapper.closest('.panel');
+                        if (panel) panel.style.zIndex = '';
                     });
                     dropdown.appendChild(item);
                 });
@@ -1239,7 +1207,6 @@ Do not include any other text, preambles, explanations, or comments about the or
                 trigger.addEventListener('click', e => {
                     e.stopPropagation();
                     const isOpening = !dropdown.classList.contains('open');
-                    // Close all others and reset their panel z-index
                     document.querySelectorAll('.custom-select-dropdown.open').forEach(d => {
                         d.classList.remove('open');
                         d.previousElementSibling.classList.remove('open');
@@ -1249,7 +1216,6 @@ Do not include any other text, preambles, explanations, or comments about the or
                     if (isOpening) {
                         dropdown.classList.add('open');
                         trigger.classList.add('open');
-                        // Elevate this panel above siblings so dropdown isn't hidden behind them
                         const panel = wrapper.closest('.panel');
                         if (panel) panel.style.zIndex = '10';
                     }
