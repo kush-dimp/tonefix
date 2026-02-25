@@ -11,12 +11,20 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields: model, messages' });
     }
 
+    const isGemini = model.startsWith('gemini-');
+    const endpoint = isGemini
+        ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
+        : 'https://api.openai.com/v1/chat/completions';
+    const apiKey = isGemini
+        ? process.env.GEMINI_API_KEY
+        : process.env.OPENAI_API_KEY;
+
     try {
-        const apiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        const apiResponse = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+                'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({ model, messages, max_tokens })
         });
